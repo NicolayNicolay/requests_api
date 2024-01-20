@@ -9,8 +9,10 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
+use Modules\Applications\Forms\ApplicationModerateForm;
 use Modules\Applications\Forms\ApplicationUserForm;
 use Modules\Applications\Models\Applications;
+use Modules\Applications\Services\ApplicationService;
 use Modules\Projects\Forms\ProjectForm;
 use Modules\Projects\Models\Projects;
 use Modules\Projects\Resources\ProjectResource;
@@ -24,6 +26,7 @@ class ApplicationsController extends Controller
 
     /** @var ApplicationUserForm */
     public ApplicationUserForm $user_form;
+    public ApplicationModerateForm $moderate_form;
 
     /**
      * Create a new controller instance.
@@ -43,6 +46,7 @@ class ApplicationsController extends Controller
         $this->middleware(
             function ($request, $next) {
                 $this->user_form = (new ApplicationUserForm());
+                $this->moderate_form = (new ApplicationModerateForm($this->application_id));
                 return $next($request);
             }
         );
@@ -52,7 +56,7 @@ class ApplicationsController extends Controller
     public function index(Request $request)
     {
         $per_page = config('app.per_page');
-        return $this->applications->paginate($per_page);
+        return $this->applications->filter($request->all())->paginate($per_page);
     }
 
     /**
@@ -70,6 +74,22 @@ class ApplicationsController extends Controller
         $fields = $this->user_form->getFieldsFromRequest();
         // Создаем новый объект
         $this->applications->create($fields);
+        return true;
+    }
+
+    public function store(ApplicationService $service): bool
+    {
+        // Получаем правила валидации из формы
+        $this->moderate_form->form();
+        $validation_rules = $this->moderate_form->getValidationRules();
+        $this->moderate_form->validate($validation_rules);
+        // Получаем заполненные поля из запроса
+        $fields = $this->moderate_form->getFieldsFromRequest();
+        if ($this->application_id) {
+            // Обновляем объект если во входящих параметрах есть идентификатор
+            $project = $this->applications->find($this->application_id);
+            $project->update($fields);
+        }
         return true;
     }
 
@@ -91,5 +111,10 @@ class ApplicationsController extends Controller
     public function getUserForm(): array
     {
         return $this->user_form->form()->getArray();
+    }
+
+    public function getModerateForm(): array
+    {
+        return $this->moderate_form->form()->getArray();
     }
 }

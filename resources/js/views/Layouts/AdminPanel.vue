@@ -80,6 +80,7 @@
       </div>
     </div>
   </div>
+  <modal-component />
   <mobile-menu/>
 </template>
 
@@ -92,6 +93,7 @@ import MobileIcon from "@/components/Icons/MobileIcon.vue";
 import BreadcrumbComponent from "@/components/System/BreadcrumbComponent.vue";
 import ApplicationIcon from "@/components/Icons/ApplicationIcon.vue";
 import ApplicationListIcon from "@/components/Icons/ApplicationListIcon.vue";
+import ModalComponent from "@/components/Modals/ModalComponent.vue";
 
 const user = ref(authStore().userData)
 </script>

@@ -17,6 +17,9 @@ return new class extends Migration {
             $table->string('status')->default('active')->comment('Статус');
             $table->longText('message')->comment('Сообщение пользователя');
             $table->longText('comment')->nullable()->default(null)->comment('Ответ ответственного лица');
+            $table->unsignedBigInteger('user_id')->nullable()->default(null)->comment('Ответственное лицо');
+            $table->foreign('user_id')
+                ->references('id')->on('users');
             $table->timestamps();
         });
     }

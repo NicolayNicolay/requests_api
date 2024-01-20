@@ -26,6 +26,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/Pages/ApplicationListPage.vue')
   },
   {
+    name: 'EditApplicationForm',
+    path: '/admin/moderate/:id',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Pages/ApplicationModerateForm.vue')
+  },
+  {
     name: 'Login',
     path: '/login',
     meta: {
