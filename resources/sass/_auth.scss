@@ -1,0 +1,36 @@
+.form-signin {
+  width: 100%;
+  max-width: 420px;
+  padding: 15px;
+  margin: auto;
+  .logo{
+    display: block;
+    font-weight: bold;
+    text-align: center;
+    font-size: 42px;
+    line-height: 1;
+    margin: auto;
+    width: 100%;
+    max-width: 190px;
+    text-transform: uppercase;
+    color:$primary;
+    img{
+      width: 85px;
+    }
+  }
+  h1 {
+    margin-bottom: 0;
+  }
+
+  .checkbox {
+    font-weight: 400;
+  }
+
+  .form-floating:focus-within {
+    z-index: 2;
+  }
+
+  hr{
+    border-top: 1px solid white;
+  }
+}
