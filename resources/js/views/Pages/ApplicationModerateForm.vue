@@ -21,6 +21,7 @@
                           v-if="field.type === 'text'"
                           :name="field.name"
                           :id="field.id"
+                          :disable="field.disabled"
                           v-model="field.value"
                           class="form-control"
                         ></input-text-component>
@@ -29,6 +30,7 @@
                           :name="field.name"
                           :rows="8"
                           :id="field.id"
+                          :disable="field.disabled"
                           v-model="field.value"
                           class="form-control"
                         ></textarea-component>

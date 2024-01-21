@@ -8,21 +8,22 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Modules\MailApplications\Models\MailApplication;
 
 class SendMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public string $text;
+    public MailApplication $mailApplication;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(string $text)
+    public function __construct(MailApplication $mailApplication)
     {
-        $this->text = $text;
+        $this->mailApplication = $mailApplication;
     }
 
     /**
@@ -35,7 +36,8 @@ class SendMail extends Mailable
         return $this->subject('Сообщение от модератора')->from('info@site.ru', 'info@site.ru')->view(
             'Mail.Message',
             [
-                'mess' => $this->text,
+                'name' => $this->mailApplication->application->name,
+                'mess' => $this->mailApplication->text,
             ]
         );
     }

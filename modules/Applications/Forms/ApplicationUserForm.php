@@ -41,7 +41,7 @@ class ApplicationUserForm extends AbstractForm
              * Основные поля
              */
             'name'    => (new InputText())
-                ->setLabel('Название')
+                ->setLabel('ФИО')
                 ->setValidationRule('required')
                 ->setNameAndId('name')
                 ->get(),

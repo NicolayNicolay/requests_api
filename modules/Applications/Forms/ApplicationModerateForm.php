@@ -10,6 +10,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Modules\Applications\Models\Applications;
 use Modules\Applications\Services\ApplicationService;
+use Modules\Enums\StatusEnum;
 use Modules\System\Forms\AbstractForm;
 use Modules\System\Forms\Inputs\InputCheckbox;
 use Modules\System\Forms\Inputs\InputText;
@@ -53,21 +54,24 @@ class ApplicationModerateForm extends AbstractForm
              * Основные поля
              */
             'name'     => (new InputText())
-                ->setLabel('Название')
+                ->setLabel('ФИО')
                 ->setValidationRule('required')
                 ->setNameAndId('name')
+                ->setDisabled(true)
                 ->setValue($this->getFieldValue('name'))
                 ->get(),
             'email'    => (new InputText())
                 ->setLabel('Email')
                 ->setValidationRule('required|email')
                 ->setNameAndId('email')
+                ->setDisabled(true)
                 ->setValue($this->getFieldValue('email'))
                 ->get(),
             'message'  => (new InputTextarea())
                 ->setLabel('Сообщение')
                 ->setValidationRule('required|max:1200')
                 ->setNameAndId('message')
+                ->setDisabled(true)
                 ->setValue($this->getFieldValue('message'))
                 ->get(),
             'comment'  => (new InputTextarea())
@@ -125,8 +129,8 @@ class ApplicationModerateForm extends AbstractForm
         if (array_key_exists('moderate', $fields_completed)) {
             $fields_completed['status'] = ApplicationService::getDbStatusValue($fields_completed['moderate']);
         }
-        $fields_completed['user_id'] = $this->user ? $this->user->id : 1;
-        $fields_completed['updated_at'] = Carbon::now()->timezone('Europe/Moscow')->format('Y-m-d H:i:s');
+        $fields_completed['user_id'] = $fields_completed['status'] === StatusEnum::Resolved ? $this->user ? $this->user->id : 1 : null;
+        $fields_completed['updated_at'] = $fields_completed['status'] === StatusEnum::Resolved ? Carbon::now()->timezone('Europe/Moscow')->format('Y-m-d H:i:s') : null;
         return $fields_completed;
     }
 

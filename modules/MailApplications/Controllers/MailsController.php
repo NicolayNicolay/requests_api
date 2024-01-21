@@ -60,7 +60,7 @@ class MailsController extends Controller
         $fields = $this->form->getFieldsFromRequest();
         // Создаем новый объект
         $mail = $this->mails->create($fields);
-        Mail::to($mail->application_mail)->send(new SendMail($mail->text));
+        Mail::to($mail->application_mail)->send(new SendMail($mail));
         return true;
     }
 }
