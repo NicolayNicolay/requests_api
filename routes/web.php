@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Applications\Controllers\ApplicationsController;
 use Modules\Auth\Controllers\AuthController;
 use Modules\Auth\Controllers\RegisterController;
+use Modules\MailApplications\Controllers\MailsController;
 
 Route::group(['prefix' => 'api'], function () {
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
@@ -21,6 +22,9 @@ Route::group(['prefix' => 'api'], function () {
             Route::get('/remove/{id?}', [ApplicationsController::class, 'destroy'])->name('requests.remove');
             Route::get('/getUserForm', [ApplicationsController::class, 'getUserForm'])->name('requests.getUserForm');
             Route::get('/getModerateForm/{id?}', [ApplicationsController::class, 'getModerateForm'])->name('requests.getModerateForm');
+        });
+        Route::group(['prefix' => 'mails'], function () {
+            Route::post('/store/{id?}', [MailsController::class, 'store'])->name('mails.store');
         });
     });
 });

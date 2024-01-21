@@ -7,6 +7,9 @@
           <display-errors v-if="errors" :errors="errors"></display-errors>
           <flash-message type="success" class="mb-2"></flash-message>
           <form @submit.prevent="submitForm">
+            <button class="btn btn-primary mb-3" @click.prevent="openModalMail">
+              Отправить сообщение
+            </button>
             <div class="card">
               <div class="card-body add-form">
                 <div class="row">
@@ -68,7 +71,10 @@ import {config} from "@/config";
 import FlashMessage from "@/components/System/FlashMessage.vue";
 import InputCheckBox from "@/components/Forms/InputCheckBox.vue";
 import {useRoute, useRouter} from 'vue-router';
+import {useModal} from "@/composables/useModal";
+import MailModal from "@/components/Modals/MailModal.vue";
 
+const modal = useModal()
 const {init} = useBreadcrumbs()
 const bread = [{
   'name': 'Модерация',
@@ -87,6 +93,15 @@ init(bread, false)
 onMounted(() => {
   getForm();
 })
+
+function openModalMail() {
+  modal.open({
+    component: MailModal,
+    modelValue: {
+      id: objectId.value,
+    }
+  })
+}
 
 async function getForm() {
   loading.value = true;
